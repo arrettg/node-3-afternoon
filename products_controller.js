@@ -14,10 +14,10 @@ module.exports = {
 
   getOne: (req, res, next) => {
     const dbInstance = req.app.get("db");
-
+    const { id } = req.params;
     dbInstance
-      .read_product()
-      .then(product => res.sendStatus(200).send(product))
+      .read_product(id)
+      .then(product => res.status(200).send(product))
       .catch(err => {
         res.status(500).send({ errorMessae: "you stupid" });
         console.log(err);
@@ -41,8 +41,8 @@ module.exports = {
     const { params, query } = req;
 
     dbInstance
-      .update_product()
-      .then(product => res.sendStatus(200).send(product))
+      .update_product([params.id, query.desc])
+      .then(() => res.sendStatus(200))
       .catch(err => {
         res.status(500).send({ errorMessae: "you stupid" });
         console.log(err);
@@ -50,10 +50,11 @@ module.exports = {
   },
   delete: (req, res, next) => {
     dbinstance = req.app.get("db");
+    const { id } = req.params;
 
     dbInstance
       .delete_product(id)
-      .then(product => res.sendStatus(200).send(product))
+      .then(() => res.sendStatus(200))
       .catch(err => {
         res.status(500).send({ errorMessae: "you stupid" });
         console.log(err);
